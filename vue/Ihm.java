@@ -78,5 +78,23 @@ public class Ihm {
         return reponse.equals("O");
     }
 
+    public int demanderTypeIA() {
+        afficherMessage("Choisissez l'IA contre laquelle jouer : ");
+        afficherMessage("1 - IA Minimax (stratégique)");
+        afficherMessage("2 - IA Naïve (prend le premier coup valide)");
+
+        int choix;
+        do {
+            choix = scanner.nextInt();
+            scanner.nextLine();
+            if (choix < 1 || choix > 2) {
+                afficherMessage("Choix invalide, veuillez entrer 1 ou 2.");
+            }
+        } while (choix < 1 || choix > 2);
+
+        return choix;
+    }
+
+
 
 }

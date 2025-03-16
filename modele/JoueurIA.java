@@ -1,21 +1,14 @@
 package modele;
 
-
-import java.util.ArrayList;
-import java.util.Random;
-
 public class JoueurIA extends Joueur {
-    private Random random;
+    private ModeIA strategie;
 
-    public JoueurIA(String nom, char couleur) {
+    public JoueurIA(String nom, char couleur, ModeIA strategie) {
         super(nom, couleur);
-        this.random = new Random();
+        this.strategie = strategie;
     }
 
-    public int[] choisirCoup(ArrayList<int[]> coupsPossibles) {
-        if (coupsPossibles.isEmpty()) {
-            return null; // Aucun coup possible
-        }
-        return coupsPossibles.get(random.nextInt(coupsPossibles.size()));
+    public int[] choisirCoup(Partie partie) {
+        return strategie.jouerCoup(partie, getCouleur());
     }
 }

@@ -1,12 +1,11 @@
 package controleur;
 
-import modele.Joueur;
-import modele.JoueurIA;
-import modele.Partie;
+import modele.*;
+import modele.Coup;
+import modele.ModeIA;
 import vue.Ihm;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Controleur {
     private Ihm ihm;
@@ -18,10 +17,18 @@ public class Controleur {
 
     public void jouer() {
         String nomJoueur1 = ihm.demanderNomJoueur(1);
-        boolean contreIA = ihm.demanderSiContreIA(); // Ajout d'une méthode pour choisir le mode IA ou 2 joueurs
+        boolean contreIA = ihm.demanderSiContreIA();
 
         Joueur joueur1 = new Joueur(nomJoueur1, 'N');
-        Joueur joueur2 = contreIA ? new JoueurIA("IA", 'B') : new Joueur(ihm.demanderNomJoueur(2), 'B');
+        Joueur joueur2;
+
+        if (contreIA) {
+            int choixIA = ihm.demanderTypeIA();
+            ModeIA strategieIA = (choixIA == 1) ? new IAMinimax() : new IANaive();
+            joueur2 = new JoueurIA("IA", 'B', strategieIA);
+        } else {
+            joueur2 = new Joueur(ihm.demanderNomJoueur(2), 'B');
+        }
 
         boolean rejouer = true;
         while (rejouer) {
@@ -39,7 +46,6 @@ public class Controleur {
             Joueur joueurCourant = partie.getJoueurCourant();
             ArrayList<int[]> coupsPossibles = new ArrayList<>(partie.getCoupsPossibles(joueurCourant.getCouleur()));
 
-            // Vérifier s'il y a des coups possibles
             if (coupsPossibles.isEmpty()) {
                 ihm.afficherMessage(joueurCourant.getNom() + " ne peut pas jouer et passe son tour.");
                 partie.passerTour();
@@ -50,21 +56,18 @@ public class Controleur {
             boolean coupValide = false;
 
             if (joueurCourant instanceof JoueurIA) {
-                // L'IA choisit un coup automatiquement
                 JoueurIA ia = (JoueurIA) joueurCourant;
-                int[] coupIA = ia.choisirCoup(coupsPossibles);
+                int[] coupIA = ia.choisirCoup(partie);
                 coup = (coupIA[0] + 1) + " " + (char) ('A' + coupIA[1]);
 
                 ihm.afficherMessage("L'IA joue : " + coup);
                 coupValide = partie.jouerCoup(coup);
             } else {
-                // Demande du coup au joueur humain
                 do {
                     coup = ihm.demanderCoup(joueurCourant.getNom());
 
-                    // Vérification du format du coup (ligne et colonne séparées)
                     if (!coup.matches("[1-8] [A-H]") && !coup.equals("P")) {
-                        ihm.afficherMessage("Format du coup invalide. Exemple attendu : 3 D ou P pour passer.");
+                        ihm.afficherMessage("Format invalide. Exemple : 3 D ou P pour passer.");
                         continue;
                     }
 
@@ -74,7 +77,7 @@ public class Controleur {
                     } else {
                         coupValide = partie.jouerCoup(coup);
                         if (!coupValide) {
-                            ihm.afficherMessage("Coup invalide. Veuillez réessayer.");
+                            ihm.afficherMessage("Coup invalide. Réessayez.");
                         }
                     }
                 } while (!coupValide);

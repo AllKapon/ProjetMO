@@ -235,6 +235,15 @@ public class Partie {
         return false;
     }
 
+    public Partie copier() {
+        Partie copie = new Partie(joueur1, joueur2);
+        for (int i = 0; i < 8; i++) {
+            System.arraycopy(this.plateau[i], 0, copie.plateau[i], 0, 8);
+        }
+        copie.joueurCourant = this.joueurCourant;
+        return copie;
+    }
+
     /**
      * Retourne le plateau de jeu.
      **/

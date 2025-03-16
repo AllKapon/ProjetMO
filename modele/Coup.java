@@ -14,6 +14,14 @@ public class Coup {
     }
 
     /**
+     * Nouveau constructeur prenant directement une ligne et une colonne.
+     **/
+    public Coup(int ligne, int colonne) {
+        this.ligne = ligne;
+        this.colonne = colonne;
+    }
+
+    /**
      * Retourne la ligne du coup.
      **/
     public int getLigne() {
