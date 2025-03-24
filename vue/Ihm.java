@@ -2,7 +2,7 @@ package vue;
 
 import java.util.Scanner;
 
-public class Ihm {
+public class  Ihm {
     private Scanner scanner;
 
     /**
@@ -83,17 +83,28 @@ public class Ihm {
         afficherMessage("1 - IA Minimax (stratégique)");
         afficherMessage("2 - IA Naïve (prend le premier coup valide)");
 
-        int choix;
-        do {
-            choix = scanner.nextInt();
-            scanner.nextLine();
-            if (choix < 1 || choix > 2) {
-                afficherMessage("Choix invalide, veuillez entrer 1 ou 2.");
+        int choix = -1;  // Valeur par défaut invalide
+
+        while (true) {
+            System.out.print("Votre choix : ");
+            if (scanner.hasNextInt()) {
+                choix = scanner.nextInt();
+                scanner.nextLine(); // Consommer la ligne restante
+
+                if (choix == 1 || choix == 2) {
+                    break; // Sortie de la boucle si le choix est valide
+                } else {
+                    afficherMessage("Choix invalide, veuillez entrer 1 ou 2.");
+                }
+            } else {
+                afficherMessage("Entrée invalide, veuillez entrer un nombre.");
+                scanner.nextLine(); // Consommer l'entrée incorrecte
             }
-        } while (choix < 1 || choix > 2);
+        }
 
         return choix;
     }
+
 
 
 

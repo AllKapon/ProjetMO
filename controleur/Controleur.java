@@ -82,7 +82,7 @@ public class Controleur {
                     }
                 } while (!coupValide);
             }
-
+            ihm.afficherPlateau(partie.getPlateau());
             partie.changerTour();
         }
 
